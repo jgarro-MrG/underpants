@@ -20,7 +20,9 @@ var _ = {};
 *   _.identity(5) === 5
 *   _.identity({a: "b"}) === {a: "b"}
 */
-
+ _.identity = function(value) {
+    return value;
+ }
 
 /** _.typeOf
 * Arguments:
@@ -42,6 +44,16 @@ var _ = {};
 * _.typeOf([1,2,3]) -> "array"
 */
 
+_.typeOf = function(value) {
+    if (Array.isArray(value)) {
+        return 'array'
+    } else if (value === null) {
+        return 'null';
+    } else {
+        return typeof value;
+    }
+}
+
 
 /** _.first
 * Arguments:
@@ -61,6 +73,25 @@ var _ = {};
 *   _.first(["a", "b", "c"], 2) -> ["a", "b"]
 */
 
+_.first = function(arr, num) {
+    const output = []
+    if (Array.isArray(arr)) {
+        if (num === undefined || typeof num !== 'number') {
+            return arr[0];
+        } else {
+            if (num > 0) {
+                if (num > arr.length) {
+                    return arr;
+                } else {
+                    for (let i = 0; i < num; i++) {
+                        output.push(arr[i]);
+                    }
+                }
+            } 
+        }
+    }
+    return output;  
+}
 
 /** _.last
 * Arguments:
@@ -80,6 +111,25 @@ var _ = {};
 *   _.last(["a", "b", "c"], 2) -> ["b", "c"]
 */
 
+_.last = function(arr, num) {
+    const output = []
+    if (Array.isArray(arr)) {
+        if (num === undefined || typeof num !== 'number') {
+            return arr[arr.length -1];
+        } else {
+            if (num > 0) {
+                if (num > arr.length) {
+                    return arr;
+                } else {
+                    for (let i = arr.length - num; i < arr.length; i++) {
+                        output.push(arr[i]);
+                    }
+                }
+            } 
+        }
+    }
+    return output;  
+}
 
 /** _.indexOf
 * Arguments:
@@ -97,6 +147,14 @@ var _ = {};
 *   _.indexOf(["a","b","c"], "d") -> -1
 */
 
+_.indexOf = function(arr, val) {
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] === val) {
+            return i;
+        }
+    }
+    return -1;
+}
 
 /** _.contains
 * Arguments:
@@ -113,6 +171,13 @@ var _ = {};
 *   _.contains([1,"two", 3.14], "two") -> true
 */
 
+_.contains = function(arr, val) {
+    let output = false;
+    for (let i = 0; i < arr.length; i++) {
+        output = output || arr[i] === val ? true : false; 
+    }
+    return output
+}
 
 /** _.each
 * Arguments:
@@ -129,6 +194,7 @@ var _ = {};
 *   _.each(["a","b","c"], function(e,i,a){ console.log(e)});
 *      -> should log "a" "b" "c" to the console
 */
+
 
 
 /** _.unique
@@ -157,6 +223,10 @@ var _ = {};
 * Extra Credit:
 *   use _.each in your implementation
 */
+
+_.filter = function(array, action) {
+
+}
 
 
 /** _.reject
@@ -209,6 +279,14 @@ var _ = {};
 *   _.map([1,2,3,4], function(e){return e * 2}) -> [2,4,6,8]
 */
 
+_.map = function(collection, func) {
+    const output = [];
+    for (let key in collection) {
+        const newElement = func(collection[key], key, collection);
+        output.push(newElement)
+    }
+    return output;
+}
 
 /** _.pluck
 * Arguments:
