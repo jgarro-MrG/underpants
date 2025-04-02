@@ -195,6 +195,17 @@ _.contains = function(arr, val) {
 *      -> should log "a" "b" "c" to the console
 */
 
+_.each = function(col, func) {
+    if (Array.isArray(col)) {
+        for (let i = 0; i < col.length; i++) {
+            func(col[i], i, col);
+        }
+    } else {
+        for (let key in col) {
+            func(col[key], key, col);
+        }
+    }
+}
 
 
 /** _.unique
@@ -206,6 +217,16 @@ _.contains = function(arr, val) {
 * Examples:
 *   _.unique([1,2,2,4,5,6,5,2]) -> [1,2,4,5,6]
 */
+
+_.unique = function(arr) {
+    const output = [];
+    for (let i = 0; i < arr.length; i++) {        
+        if(_.indexOf(output, arr[i]) === -1) {
+            output.push(arr[i]);
+        }
+    }     
+    return output;
+}
 
 
 /** _.filter
@@ -224,8 +245,14 @@ _.contains = function(arr, val) {
 *   use _.each in your implementation
 */
 
-_.filter = function(array, action) {
-
+_.filter = function(arr, func) {
+    const output = [];
+    for (let i = 0; i < arr.length; i++) {
+        if (func(arr[i], i, arr)) {
+            output.push(arr[i]);
+        }        
+    }     
+    return output;
 }
 
 
@@ -242,6 +269,15 @@ _.filter = function(array, action) {
 *   _.reject([1,2,3,4,5], function(e){return e%2 === 0}) -> [1,3,5]
 */
 
+_.reject = function(arr, func) {
+    const output = [];
+    for (let i = 0; i < arr.length; i++) {
+        if (!func(arr[i], i, arr)) {
+            output.push(arr[i]);
+        }        
+    }     
+    return output;
+}
 
 /** _.partition
 * Arguments:
@@ -262,6 +298,12 @@ _.filter = function(array, action) {
 }
 */
 
+_.partition = function(arr, func) {
+    const output = [];
+    output.push(_.filter(arr, func));
+    output.push(_.reject(arr, func));
+    return output;   
+}
 
 /** _.map
 * Arguments:
@@ -280,10 +322,17 @@ _.filter = function(array, action) {
 */
 
 _.map = function(collection, func) {
-    const output = [];
-    for (let key in collection) {
-        const newElement = func(collection[key], key, collection);
-        output.push(newElement)
+    const output = []; 
+    if (Array.isArray(collection)) {
+        for (let i = 0; i < collection.length; i++) {
+            const newElement = func(collection[i], i, collection);
+            output.push(newElement)
+        }
+    } else {
+        for (let key in collection) {
+            const newElement = func(collection[key], key, collection);
+            output.push(newElement);
+        }
     }
     return output;
 }
@@ -299,6 +348,12 @@ _.map = function(collection, func) {
 *   _.pluck([{a: "one"}, {a: "two"}], "a") -> ["one", "two"]
 */
 
+_.pluck = function(objArr, key) {
+   const output = _.map(objArr, function(obj){
+    return obj[key];
+   });
+   return output;
+}
 
 /** _.every
 * Arguments:
@@ -321,6 +376,14 @@ _.map = function(collection, func) {
 *   _.every([1,2,3], function(e){return e % 2 === 0}) -> false
 */
 
+_.every = function(collection, func) { 
+    if (func === undefined) {
+        return !collection.includes(false);
+    } else {
+        const result = _.map(collection, func);     
+        return !result.includes(false);
+    }    
+}
 
 /** _.some
 * Arguments:
@@ -342,7 +405,14 @@ _.map = function(collection, func) {
 *   _.some([1,3,5], function(e){return e % 2 === 0}) -> false
 *   _.some([1,2,3], function(e){return e % 2 === 0}) -> true
 */
-
+_.some = function(collection, func) {
+    if (func === undefined) {
+        return collection.includes(true);
+    } else {
+        const result = _.map(collection, func);     
+        return result.includes(true);
+    }    
+}
 
 /** _.reduce
 * Arguments:
@@ -364,6 +434,27 @@ _.map = function(collection, func) {
 */
 
 
+_.reduce = function(arr, func, seed) {
+    /*
+    let finalResult = 0;
+    let previousResult = 0;
+    if (seed === undefined) {
+      console.log("A");
+      previousResult = arr[0];
+      for (let i = 1; i < arr.length; i++) {
+        finalResult += func(previousResult, arr[i], i);
+      }
+    } else {
+      console.log("B");
+      for (let i = 0; i < arr.length; i++) {
+        finalResult += func(previousResult, arr[i], i);
+      }
+    } 
+    return finalResult;
+    */
+  }
+
+
 /** _.extend
 * Arguments:
 *   1) An Object
@@ -378,6 +469,17 @@ _.map = function(collection, func) {
 *   _.extend(data, {b:"two"}); -> data now equals {a:"one",b:"two"}
 *   _.extend(data, {a:"two"}); -> data now equals {a:"two"}
 */
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters
+
+_.extend = function(objectToExtend, ...otherObjects) {
+    for (const obj of otherObjects) {
+        for (let key in obj) {
+            objectToExtend[key] = obj[key]; 
+        }
+    }
+    return objectToExtend;
+}
 
 //////////////////////////////////////////////////////////////////////
 // DON'T REMOVE THIS CODE ////////////////////////////////////////////
