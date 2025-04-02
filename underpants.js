@@ -435,23 +435,21 @@ _.some = function(collection, func) {
 
 
 _.reduce = function(arr, func, seed) {
-    /*
-    let finalResult = 0;
-    let previousResult = 0;
-    if (seed === undefined) {
-      console.log("A");
-      previousResult = arr[0];
-      for (let i = 1; i < arr.length; i++) {
-        finalResult += func(previousResult, arr[i], i);
-      }
-    } else {
-      console.log("B");
-      for (let i = 0; i < arr.length; i++) {
-        finalResult += func(previousResult, arr[i], i);
-      }
+    // initialize accumulator
+    let output = 0;
+    if (seed === undefined) { // there is no seed value
+        output = arr[0];
+        for (let i = 1; i < arr.length; i++) {
+            // reassign output to result of invoking callback 
+            output = func(output, arr[i], i);
+        }
+    } else { // there is a seed value
+        output = seed;
+        for (let i = 0; i < arr.length; i++) {
+            output = func(output, arr[i], i);
+        }
     } 
-    return finalResult;
-    */
+    return output;  
   }
 
 
